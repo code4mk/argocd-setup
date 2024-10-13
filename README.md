@@ -21,7 +21,7 @@ The script offers the following operations:
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/argocd-setup.git
+   git clone https://github.com/code4mk/argocd-setup.git
    cd argocd-setup
    ```
 
