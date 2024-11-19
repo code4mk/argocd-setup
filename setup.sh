@@ -10,7 +10,7 @@ install_argocd() {
 
 # Function to get ArgoCD secret
 get_secret() {
-    echo "Retrieving ArgoCD admin password..."
+    echo "Retrieving ArgoCD admin's password..."
     PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
     echo "ArgoCD admin password: $PASSWORD"
 }
@@ -33,24 +33,30 @@ add_load_balancer() {
     echo "Load Balancer added. It may take a few minutes for an external IP to be assigned."
 }
 
+# Function to uninstall ArgoCD
+uninstall_argocd() {
+    echo "Uninstalling ArgoCD..."
+    kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    kubectl delete namespace argocd
+    echo "ArgoCD uninstalled successfully."
+}
+
 # Main menu
-while true; do
-    echo "ArgoCD Setup Menu:"
-    echo "1. Install ArgoCD"
-    echo "2. Get ArgoCD secret"
-    echo "3. Set up port-forwarding"
-    echo "4. Add load balancer"
-    echo "5. Exit"
-    read -p "Enter your choice (1-5): " choice
+echo "ArgoCD Setup Menu:"
+echo "1. Install ArgoCD"
+echo "2. Get ArgoCD secret"
+echo "3. Set up port-forwarding"
+echo "4. Add load balancer"
+echo "5. Uninstall ArgoCD"
+echo "6. Exit"
+read -p "Enter your choice (1-6): " choice
 
-    case $choice in
-        1) install_argocd ;;
-        2) get_secret ;;
-        3) setup_port_forward ;;
-        4) add_load_balancer ;;
-        5) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please try again." ;;
-    esac
-
-    echo
-done
+case $choice in
+    1) install_argocd ;;
+    2) get_secret ;;
+    3) setup_port_forward ;;
+    4) add_load_balancer ;;
+    5) uninstall_argocd ;;
+    6) echo "Exiting..."; exit 0 ;;
+    *) echo "Invalid option." ;;
+esac
